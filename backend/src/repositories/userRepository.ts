@@ -1,40 +1,53 @@
 import { sql, poolPromise } from '../config/database';
-import { User } from '../models/userModel';
+import { IUser } from '../models/user';
+import { User } from '../models/user';
 
-class UserRepository {
-  async findAll(): Promise<User[]> {
+export interface IUserRepository {
+  findAll(): Promise<IUser[]>;
+  findById(id: number): Promise<IUser | undefined>;
+  create(userData: IUser): Promise<IUser>;
+  update(id: number, userData: IUser): Promise<IUser>;
+  delete(id: number): Promise<void>;
+}
+
+class UserRepository implements IUserRepository {
+  async findAll(): Promise<IUser[]> {
     const pool = await poolPromise;
     const result = await pool.request().query('SELECT * FROM Users');
-    return result.recordset;
+    return result.recordset.map(row => new User(row.name, row.email, row.password, row.id));
   }
 
-  async findById(id: number): Promise<User | undefined> {
+  async findById(id: number): Promise<IUser | undefined> {
     const pool = await poolPromise;
     const result = await pool.request()
       .input('id', sql.Int, id)
       .query('SELECT * FROM Users WHERE id = @id');
-    return result.recordset[0];
+    const row = result.recordset[0];
+    if (row) {
+      return new User(row.name, row.email, row.password, row.id);
+    }
+    return undefined;
   }
 
-  async create(userData: User): Promise<User> {
+  async create(user: IUser): Promise<IUser> {
     const pool = await poolPromise;
     const result = await pool.request()
-      .input('name', sql.NVarChar, userData.name)
-      .input('email', sql.NVarChar, userData.email)
-      .input('password', sql.NVarChar, userData.password)
+      .input('name', sql.NVarChar, user.name)
+      .input('email', sql.NVarChar, user.email)
+      .input('password', sql.NVarChar, user.password)
       .query('INSERT INTO Users (name, email, password) VALUES (@name, @email, @password); SELECT SCOPE_IDENTITY() AS id;');
-    return { id: result.recordset[0].id, ...userData };
+    return new User(user.name, user.email, user.password, result.recordset[0].id);
   }
 
-  async update(id: number, userData: User): Promise<User> {
+  async update(id: number, user: IUser): Promise<IUser> {
     const pool = await poolPromise;
     await pool.request()
       .input('id', sql.Int, id)
-      .input('name', sql.NVarChar, userData.name)
-      .input('email', sql.NVarChar, userData.email)
-      .input('password', sql.NVarChar, userData.password)
+      .input('name', sql.NVarChar, user.name)
+      .input('email', sql.NVarChar, user.email)
+      .input('password', sql.NVarChar, user.password)
       .query('UPDATE Users SET name = @name, email = @email, password = @password WHERE id = @id');
-    return { id, ...userData };
+    return new User(user.name, user.email, user.password, id);
   }
 
   async delete(id: number): Promise<void> {
