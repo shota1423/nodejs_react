@@ -1,7 +1,7 @@
-import { IUserRepository } from '../repositories/userRepository';
-import { IUser } from '../models/user';
-import { User } from '../models/user';
-import UserRepository from '../repositories/userRepository';
+import { IUserRepository } from '../repositories/UserRepository';
+import { IUser } from '../models/User';
+import { User } from '../models/User';
+import UserRepository from '../repositories/UserRepository';
 
 export interface IUserService {
   getAllUsers(): Promise<IUser[]>;

@@ -1,6 +1,6 @@
 import { sql, poolPromise } from '../config/database';
-import { IUser } from '../models/user';
-import { User } from '../models/user';
+import { IUser } from '../models/User';
+import { User } from '../models/User';
 
 export interface IUserRepository {
   findAll(): Promise<IUser[]>;

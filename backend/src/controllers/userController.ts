@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { IUserService } from '../services/userService';
-import UserService from '../services/userService';
+import { IUserService } from '../services/UserService';
+import UserService from '../services/UserService';
 
 
 class UserController {
