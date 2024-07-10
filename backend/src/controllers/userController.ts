@@ -2,13 +2,6 @@ import { Request, Response } from 'express';
 import { IUserService } from '../services/userService';
 import UserService from '../services/userService';
 
-export interface IUserController {
-  getAllUsers(req: Request, res: Response): Promise<void>;
-  getUserById(req: Request, res: Response): Promise<void>;
-  createUser(req: Request, res: Response): Promise<void>;
-  updateUser(req: Request, res: Response): Promise<void> ;
-  deleteUser(req: Request, res: Response): Promise<void>;
-}
 
 class UserController {
   constructor(private userService: IUserService) {}
