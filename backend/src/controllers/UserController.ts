@@ -4,30 +4,33 @@ import UserService from '../services/UserService';
 
 
 class UserController {
-  constructor(private userService: IUserService) {}
+  private _userService: IUserService;
+  constructor(userService: IUserService) {
+    this._userService = userService;
+  }
 
   async getAllUsers(req: Request, res: Response): Promise<void> {
-    const users = await this.userService.getAllUsers();
+    const users = await this._userService.getAllUsers();
     res.json(users);
   }
 
   async getUserById(req: Request, res: Response): Promise<void> {
-    const user = await this.userService.getUserById(parseInt(req.params.id, 10));
+    const user = await this._userService.getUserById(parseInt(req.params.id, 10));
     res.json(user);
   }
 
   async createUser(req: Request, res: Response): Promise<void> {
-    const user = await this.userService.createUser(req.body);
+    const user = await this._userService.createUser(req.body);
     res.status(201).json(user);
   }
 
   async updateUser(req: Request, res: Response): Promise<void> {
-    const user = await this.userService.updateUser(parseInt(req.params.id, 10), req.body);
+    const user = await this._userService.updateUser(parseInt(req.params.id, 10), req.body);
     res.json(user);
   }
 
   async deleteUser(req: Request, res: Response): Promise<void> {
-    await this.userService.deleteUser(parseInt(req.params.id, 10));
+    await this._userService.deleteUser(parseInt(req.params.id, 10));
     res.status(204).end();
   }
 }
