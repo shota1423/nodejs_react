@@ -1,16 +1,9 @@
 import { sql, poolPromise } from '../config/database';
-import { IUser } from '../models/User';
+import { IUser } from '../models/interfaces/IUser';
 import { User } from '../models/User';
+import { IUserRepository } from './interfaces/IUserRepository';
 
-export interface IUserRepository {
-  findAll(): Promise<IUser[]>;
-  findById(id: number): Promise<IUser | undefined>;
-  create(userData: IUser): Promise<IUser>;
-  update(id: number, userData: IUser): Promise<IUser>;
-  delete(id: number): Promise<void>;
-}
-
-class UserRepository implements IUserRepository {
+export class UserRepository implements IUserRepository {
   async findAll(): Promise<IUser[]> {
     const pool = await poolPromise;
     const result = await pool.request().query('SELECT * FROM Users');
@@ -57,5 +50,3 @@ class UserRepository implements IUserRepository {
       .query('DELETE FROM Users WHERE id = @id');
   }
 }
-
-export default new UserRepository();

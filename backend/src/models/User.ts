@@ -1,9 +1,4 @@
-export interface IUser {
-  id?: number;
-  name: string;
-  email: string;
-  password: string;
-}
+import { IUser } from "./interfaces/IUser";
 
 export class User implements IUser {
   private _id?: number;
