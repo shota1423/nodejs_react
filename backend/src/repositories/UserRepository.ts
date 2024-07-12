@@ -4,13 +4,13 @@ import { User } from '../models/User';
 import { IUserRepository } from './interfaces/IUserRepository';
 
 export class UserRepository implements IUserRepository {
-  async findAll(): Promise<IUser[]> {
+  findAll = async (): Promise<IUser[]> => {
     const pool = await poolPromise;
     const result = await pool.request().query('SELECT * FROM Users');
     return result.recordset.map(row => new User(row.name, row.email, row.password, row.id));
   }
 
-  async findById(id: number): Promise<IUser | undefined> {
+  findById = async (id: number): Promise<IUser | undefined> => {
     const pool = await poolPromise;
     const result = await pool.request()
       .input('id', sql.Int, id)
@@ -22,7 +22,7 @@ export class UserRepository implements IUserRepository {
     return undefined;
   }
 
-  async create(user: IUser): Promise<IUser> {
+  create = async (user: IUser): Promise<IUser> => {
     const pool = await poolPromise;
     const result = await pool.request()
       .input('name', sql.NVarChar, user.name)
@@ -32,7 +32,7 @@ export class UserRepository implements IUserRepository {
     return new User(user.name, user.email, user.password, result.recordset[0].id);
   }
 
-  async update(id: number, user: IUser): Promise<IUser> {
+  update = async (id: number, user: IUser): Promise<IUser> => {
     const pool = await poolPromise;
     await pool.request()
       .input('id', sql.Int, id)

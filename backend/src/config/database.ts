@@ -1,3 +1,4 @@
+// // SQLServer
 import sql from 'mssql';
 import dotenv from 'dotenv';
 
@@ -27,3 +28,7 @@ const poolPromise = new sql.ConnectionPool(dbConfig)
     });
 
 export { sql, poolPromise };
+
+// // MySql
+
+// // Postgresql
