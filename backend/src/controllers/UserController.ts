@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { IUserService } from '../services/interfaces/IUserService';
-import { UserService } from '../services/UserService';
+import UserService from '../services/UserService';
 
-export class UserController {
+class UserController {
   private userService: IUserService;
   constructor() {
-    this.userService = new UserService();
+    this.userService = UserService;
   }
 
 
@@ -35,3 +35,4 @@ export class UserController {
   }
 }
 
+export default new UserController();

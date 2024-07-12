@@ -1,13 +1,13 @@
 import { IUserRepository } from '../repositories/interfaces/IUserRepository';
 import { IUser } from '../models/interfaces/IUser';
 import { User } from '../models/User';
-import { UserRepository } from '../repositories/UserRepository';
+import UserRepository from '../repositories/UserRepository';
 import { IUserService } from './interfaces/IUserService';
 
-export class UserService implements IUserService {
+class UserService implements IUserService {
   private userRepository: IUserRepository; 
   constructor() {
-    this.userRepository = new UserRepository();
+    this.userRepository = UserRepository;
   }
 
 
@@ -33,3 +33,5 @@ export class UserService implements IUserService {
     return await this.userRepository.delete(id);
   }
 }
+
+export default new UserService();

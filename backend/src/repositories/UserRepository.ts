@@ -3,7 +3,7 @@ import { IUser } from '../models/interfaces/IUser';
 import { User } from '../models/User';
 import { IUserRepository } from './interfaces/IUserRepository';
 
-export class UserRepository implements IUserRepository {
+class UserRepository implements IUserRepository {
   findAll = async (): Promise<IUser[]> => {
     const pool = await poolPromise;
     const result = await pool.request().query('SELECT * FROM Users');
@@ -50,3 +50,5 @@ export class UserRepository implements IUserRepository {
       .query('DELETE FROM Users WHERE id = @id');
   }
 }
+
+export default new UserRepository();
