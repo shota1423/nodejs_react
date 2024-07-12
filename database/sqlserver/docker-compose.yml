@@ -12,4 +12,4 @@ services:
       - ./sqlserver/secrets:/var/opt/mssql/secrets
       - ./sqlserver/temp:/tmp/userdata
     ports:
-      - "1435:1433"
+      - "1433:1433"
