@@ -6,13 +6,13 @@ WORKDIR /usr/src/app
 
 # パッケージのコピーとインストール
 COPY package*.json ./
-RUN npm install
+CMD ["npm", "install"]
 
 # アプリケーションのソースをコピー
 COPY . .
 
 # ビルドの実行
-RUN npm run build
+CMD ["npm", "run", "build"]
 
 # アプリケーションの起動
 CMD ["npm", "start"]
