@@ -1,0 +1,15 @@
+version: "3.4"
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-CU14-ubuntu-20.04
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: 6d374D9eb779
+      MSSQL_COLLATION: Japanese_CI_AS
+    volumes:
+      - ./sqlserver/dbdata:/var/opt/mssql/data
+      - ./sqlserver/log:/var/opt/mssql/log
+      - ./sqlserver/secrets:/var/opt/mssql/secrets
+      - ./sqlserver/temp:/tmp/userdata
+    ports:
+      - "1435:1433"
