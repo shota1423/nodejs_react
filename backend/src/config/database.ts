@@ -1,34 +1,67 @@
-// // SQLServer
-import sql from 'mssql';
-import dotenv from 'dotenv';
+// config.ts
+import { config } from "dotenv";
+import { MySqlClient } from "../clients/MySqlClient";
+import { SqlServerClient } from "../clients/SqlServerClient";
+import { PostgreSqlClient } from "../clients/PostgreSqlClient";
+import { IDatabaseClient } from "../clients/interfaces/IDatabaseClient";
 
-dotenv.config();
+config();
 
-const dbConfig: sql.config = {
-    user: process.env.DB_USER || '',
-    password: process.env.DB_PASSWORD || '',
-    server: process.env.DB_SERVER || '',
-    database: process.env.DB_DATABASE || '',
-    port: Number(process.env.DB_PORT) || 1433,
+let dbClient: IDatabaseClient;
+
+const dbType = process.env.DB_TYPE;
+const dbHost = process.env.DB_HOST;
+const dbUser = process.env.DB_USER;
+const dbPassword = process.env.DB_PASSWORD;
+const dbDatabase = process.env.DB_DATABASE;
+const dbPort = Number(process.env.DB_PORT);
+
+if (!dbType || !dbHost || !dbUser || !dbPassword || !dbDatabase) {
+  throw new Error("Required environment variables are not set");
+}
+
+if (dbType === "mysql") {
+  dbClient = new MySqlClient({
+    host: dbHost,
+    user: dbUser,
+    password: dbPassword,
+    database: dbDatabase,
+    port: dbPort || 3306,
+  });
+} else if (dbType === "sqlserver") {
+  dbClient = new SqlServerClient({
+    user: dbUser,
+    password: dbPassword,
+    server: dbHost,
+    database: dbDatabase,
+    port: dbPort || 1433,
     options: {
-        encrypt: true,
-        trustServerCertificate: true,
+      encrypt: true,
+      trustServerCertificate: true,
     },
-};
+  });
+} else if (dbType === "postgresql") {
+  dbClient = new PostgreSqlClient({
+    host: dbHost,
+    user: dbUser,
+    password: dbPassword,
+    database: dbDatabase,
+    port: dbPort || 5432,
+  });
+} else {
+  throw new Error("Unsupported DB_TYPE");
+}
 
-const poolPromise = new sql.ConnectionPool(dbConfig)
-    .connect()
-    .then(pool => {
-        console.log('Connected to SQL Server');
-        return pool;
-    })
-    .catch(err => {
-        console.log(`Database Connection Failed! Bad Config: ${err}`);
-        throw err;
-    });
+if (dbType) {
+  console.log(`${dbType} To Connected`);
+}
 
-export { sql, poolPromise };
+const poolPromise = dbClient
+  .connect()
+  .then(() => dbClient)
+  .catch((err) => {
+    console.error("Database connection failed: ", err);
+    throw err;
+  });
 
-// // MySql
-
-// // Postgresql
+export { poolPromise };
