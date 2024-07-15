@@ -1,4 +1,3 @@
-// config.ts
 import { config } from "dotenv";
 import { MySqlClient } from "../clients/MySqlClient";
 import { SqlServerClient } from "../clients/SqlServerClient";

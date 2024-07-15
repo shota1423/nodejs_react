@@ -1,4 +1,3 @@
-// clients/MySqlClient.ts
 import mysql, { Pool } from "mysql2/promise";
 import { IDatabaseClient } from "./interfaces/IDatabaseClient";
 

@@ -1,4 +1,3 @@
-// clients/PostgreSqlClient.ts
 import { Pool } from "pg";
 import { IDatabaseClient } from "./interfaces/IDatabaseClient";
 

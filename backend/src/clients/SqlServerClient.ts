@@ -1,4 +1,3 @@
-// clients/SqlServerClient.ts
 import sql from "mssql";
 import { IDatabaseClient } from "./interfaces/IDatabaseClient";
 

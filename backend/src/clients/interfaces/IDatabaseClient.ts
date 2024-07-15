@@ -1,4 +1,3 @@
-// clients/interfaces/IDatabaseClient.ts
 export interface IDatabaseClient {
   connect(): Promise<void>;
   close(): Promise<void>;
